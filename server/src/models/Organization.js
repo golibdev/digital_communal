@@ -7,6 +7,11 @@ const organizationSchema = new Schema({
       required: true,
       unique: true
    },
+   ruName: {
+      type: String,
+      required: true,
+      unique: true
+   },
    services: [{
       type: Schema.Types.ObjectId,
       ref: 'Service'

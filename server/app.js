@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(specs))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 app.use('/api/v1', indexRouter);
 
 module.exports = app;

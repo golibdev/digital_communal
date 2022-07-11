@@ -13,14 +13,21 @@ const physicalPersonSchema = new Schema({
    },
    passportSerialAndNumber: {
       type: String,
-      unique: true
+      unique: true,
+      required: true
    },
    passportJSHSHIR: {
       type: String,
-      unique: true
+      unique: true,
+      required: true
    },
    address: {
       type: String,
+      required: true
+   },
+   password: {
+      type: String,
+      required: true
    },
    image: {
       type: String,

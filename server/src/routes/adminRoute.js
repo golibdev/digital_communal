@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { adminController } = require('../controllers');
+const { verifyAdminToken } = require('../middlewares');
 
 /**
  * @swagger
@@ -21,11 +22,42 @@ const { adminController } = require('../controllers');
  *                type: string
  *                description: Admin's full name
  *          example:
- *             _id: 5e9f8f8f8f8f8f8f8f8f8f8f
  *             username: admin
  *             password: admin
- *             fullName: Admin Admin Admin
- *          
+ *       Error:
+ *          type: object
+ *          properties:
+ *             message:
+ *                type: string
+ *                description: Error message
+ *          status:
+ *             type: number
+ *             description: Error status
+ *       SuccessLogin:
+ *          type: object
+ *          properties:
+ *             message:
+ *                type: string
+ *                description: Success Login message
+ *       SuccessRegister:
+ *          type: object
+ *          properties:
+ *             message:
+ *                type: string
+ *                description: Success Register message
+ *       SuccessUpdate:
+ *          type: object
+ *          properties:
+ *             message:
+ *                type: string
+ *                description: Success Update message
+ *    securitySchemes:
+ *       bearerAuth:
+ *          type: http
+ *          scheme: bearer
+ *          in: header
+ *          bearerFormat: JWT
+ * 
  */
 
 /**
@@ -48,19 +80,19 @@ const { adminController } = require('../controllers');
  *             content:
  *                application/json:
  *                   schema:
- *                      ref: '#/components/schemas/Admin'
+ *                      ref: '#/components/schemas/SuccessLogin'
  *          400:
  *             description: Invalid username or password
  *             content:
  *                application/json:
  *                   schema:
- *                      $ref: '#/components/schemas/Admin'
+ *                      $ref: '#/components/schemas/Error'
  *          500:
  *             description: Internal server error
  *             content:
  *                application/json:
  *                   schema:
- *                      $ref: '#/components/schemas/Admin'
+ *                      $ref: '#/components/schemas/Error'
  *
  */
 router.post('/login', adminController.login);
@@ -86,7 +118,7 @@ router.post('/login', adminController.login);
  *             content:
  *                application/json:
  *                   schema:
- *                      ref: '#/components/schemas/Admin'
+ *                      ref: '#/components/schemas/SuccessRegister'
  *          400:
  *             description: Admin already exists
  *             content:
@@ -99,8 +131,62 @@ router.post('/login', adminController.login);
  *                application/json:
  *                   schema:
  *                      $ref: '#/components/schemas/Admin'
- *
  */
 router.post('/register', adminController.register);
+
+/**
+ * @swagger
+ * paths:
+ *    /api/v1/admin/update/{id}:
+ *       put:
+ *          summary: Update admin
+ *          tags: [Admin]
+ *          security:
+ *             - bearerAuth: []               
+ *          consumes:
+ *             - application/json
+ *          produces:
+ *             - application/json
+ *          parameters:
+ *             - in: path
+ *               name: id
+ *               required: true
+ *               schema:
+ *                   type: string
+ *               description: Admin's object id
+ *          requestBody:
+ *             required: true
+ *             description: Admins data to update
+ *             content:
+ *                application/json:
+ *                   schema:
+ *                      $ref: '#/components/schemas/Admin'
+ *          responses:
+ *             200:
+ *                description: Admin updated
+ *                content:
+ *                   application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/SuccessUpdate'
+ *             404:
+ *                description: Invalid admin data
+ *                content:
+ *                   application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/Error'
+ *             401:
+ *                description: Unauthorized
+ *                content:
+ *                   application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/Error'
+ *             500:
+ *                description: Internal server error
+ *                content:
+ *                   application/json:
+ *                      schema:
+ *                         $ref: '#/components/schemas/Error'   
+ */
+router.put('/update/:id', verifyAdminToken, adminController.update);
 
 module.exports = router;

@@ -7,6 +7,16 @@ const serviceSchema = new Schema({
       required: true,
       unique: true
    },
+   ruName: {
+      type: String,
+      required: true,
+      unique: true
+   },
+   slug: {
+      type: String,
+      required: true,
+      unique: true
+   },
    price: {
       type: Number,
       required: true,

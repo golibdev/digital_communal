@@ -1,21 +1,20 @@
 const { model, Schema } = require('mongoose')
 const { schemaOptions } = require('./schemaOptions')
 
-const paymentSchema = new Schema({
-   amount: {
-      type: Number,
+const notificationSchema = new Schema({
+   title: {
+      type: String,
       required: true
    },
-   service: {
-      type: Schema.Types.ObjectId,
-      ref: 'Service',
+   message: {
+      type: String,
       required: true
    },
-   physicalPerson: {
+   person: {
       type: Schema.Types.ObjectId,
       ref: 'PhysicalPerson',
       required: true
    }
 }, schemaOptions)
 
-module.exports = model('Payment', paymentSchema)
+module.exports = model('Notification', notificationSchema)
