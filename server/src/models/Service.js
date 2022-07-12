@@ -12,7 +12,12 @@ const serviceSchema = new Schema({
       required: true,
       unique: true
    },
-   slug: {
+   ruSlug: {
+      type: String,
+      required: true,
+      unique: true
+   },
+   uzSlug: {
       type: String,
       required: true,
       unique: true
@@ -23,6 +28,10 @@ const serviceSchema = new Schema({
       default: 0
    },
    description: {
+      type: String,
+      required: true
+   },
+   ruDescription: {
       type: String,
       required: true
    },
