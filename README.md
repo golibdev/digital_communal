@@ -2,6 +2,7 @@ DIGITAL COMMUNAL API
 
 
 exports.login = async (req, res) => {
+   
    try {
       const {
          username,
