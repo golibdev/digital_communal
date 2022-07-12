@@ -47,6 +47,30 @@ exports.getAll = async (req, res) => {
    }
 }
 
+exports.search = async (req, res) => {
+   try {
+      const { search } = req.query
+
+      const organizations = await Organization.find({
+         $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { ruName: { $regex: search, $options: 'i' } }
+         ]
+      })
+
+      if(!organizations) {
+         return res.status(404).json({
+            ruMessage: 'Нет организаций',
+            uzMessage: 'Tashkilot topilmadi'
+         })
+      }
+
+      res.status(200).json({organizations})
+   } catch (err) {
+      res.status(500).json({ message: err.message })
+   }
+}
+
 exports.getOne = async (req, res) => {
    try {
       const { id } = req.params

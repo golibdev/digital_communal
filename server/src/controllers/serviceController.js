@@ -49,6 +49,30 @@ exports.getAll = async (req, res) => {
    }
 }
 
+exports.search = async (req, res) => {
+   try {
+      const search = req.query.search
+
+      const services = await Service.find({
+         $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { ruName: { $regex: search, $options: 'i' } }
+         ]
+      })
+
+      if(!services) {
+         return res.status(404).json({
+            ruMessage: 'Нет услуг',
+            uzMessage: 'Xizmat topilmadi'
+         })
+      }
+
+      res.status(200).json({ services })
+   } catch (err) {
+      res.status(500).json({ message: err.message })
+   }
+}
+
 exports.getOne = async (req, res) => {
    try {
       const id = req.params.id

@@ -4,6 +4,7 @@ const { verifyUserToken, verifyAdminToken, verify } = require('../middlewares');
 
 router.post('/login', personController.login);
 router.post('/register', personController.register);
+router.get('/search', personController.search);
 router.get('/', verifyAdminToken, personController.getAll);
 router.get('/:id', verify, personController.getById);
 router.put('/:id', verifyUserToken, personController.update);

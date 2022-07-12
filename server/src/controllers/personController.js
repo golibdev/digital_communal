@@ -89,11 +89,17 @@ exports.register = async (req, res) => {
 
 exports.getAll = async (req, res) => {
    try {
+      const page = req.query.page || 1
+      const limit = 10
+      const skipIndex = (page - 1) * limit
+
       const people = await PhysicalPerson
          .find()
+         .skip(skipIndex)
+         .limit(limit)
          .populate('appeals')
          .populate('payments')
-         .populate('notification')
+         .sort({ createdAt: -1 })
 
       if(!people) {
          return res.status(404).json({
@@ -101,6 +107,8 @@ exports.getAll = async (req, res) => {
             uzMessage: 'Ma`lumotlar topilmadi'
          })
       }
+
+      const total = await PhysicalPerson.countDocuments()
 
       const peopleDetails = []
 
@@ -116,13 +124,21 @@ exports.getAll = async (req, res) => {
             address: person.address,
             payments: person.payments,
             appeals: person.appeals,
-            notification: person.notification
+            image: person.image,
          }
 
          peopleDetails.push(personDetails)
       }
 
-      return res.status(200).json({ people: peopleDetails })
+      return res.status(200).json({
+         people: peopleDetails,
+         pagination: {
+            total,
+            page,
+            limit,
+            next: `/api/v1/person?page=${page + 1}`
+         }
+      })
    } catch (err) {
       res.status(500).json({ message: err.message })
    }
@@ -248,6 +264,32 @@ exports.update = async (req, res) => {
          fullName: req.body.fullName ? req.body.fullName : person.fullName,
          address: req.body.address ? req.body.address : person.address
       }, { new: true })
+   } catch (err) {
+      res.status(500).json({ message: err.message })
+   }
+}
+
+exports.search = async (req, res) => {
+   try {
+      const { search } = req.query
+
+      const people = await PhysicalPerson.find({
+         $or: [
+            { fullName: { $regex: search, $options: 'i' } },
+            { passportSerialAndNumber: { $regex: search, $options: 'i' } },
+            { passportJSHSHIR: { $regex: search, $options: 'i' } },
+            { phoneNumber: { $regex: search, $options: 'i' } }
+         ]
+      }).sort({ createdAt: -1 })
+
+      if(!people) {
+         return res.status(404).json({
+            ruMessage: 'Пользователь не найден',
+            uzMessage: 'Ma`lumot topilmadi'
+         })
+      }
+
+      res.status(200).json({ people })
    } catch (err) {
       res.status(500).json({ message: err.message })
    }
