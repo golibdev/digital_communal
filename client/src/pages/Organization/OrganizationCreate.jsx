@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { organizationApi } from '../api/organizationApi'
+import { organizationApi } from '../../api/organizationApi'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 

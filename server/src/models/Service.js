@@ -12,16 +12,6 @@ const serviceSchema = new Schema({
       required: true,
       unique: true
    },
-   ruSlug: {
-      type: String,
-      required: true,
-      unique: true
-   },
-   uzSlug: {
-      type: String,
-      required: true,
-      unique: true
-   },
    price: {
       type: Number,
       required: true,

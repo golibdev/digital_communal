@@ -8,24 +8,24 @@ const headers = {
    }
 }
 
-export const organizationApi = {
+export const servicesApi = {
    getAll: () => axios.get(
-      `${baseUrl}/organization`
+      `${baseUrl}/service`
    ),
    getAllPagination: (page) => axios.get(
-      `${baseUrl}/organization?page=${page}`
+      `${baseUrl}/service?page=${page}`
    ),
    getAllNoPage: () => axios.get(
-      `${baseUrl}/organization?no_page=true`
+      `${baseUrl}/service?no_page=true`
    ),
    getSearch: (search) => axios.get(
-      `${baseUrl}/organization/search?search=${search}`
+      `${baseUrl}/service/search?search=${search}`
    ),
    getById: (id) => axios.get(
-      `${baseUrl}/organization/${id}`
+      `${baseUrl}/service/${id}`
    ),
    create: (params) => axios.post(
-      `${baseUrl}/organization`,
+      `${baseUrl}/service`,
       params,
       headers
    ),

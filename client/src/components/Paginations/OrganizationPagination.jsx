@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react'
 import ReactPaginate from 'react-paginate'
-import { userApi } from '../../api/usersApi'
+import { organizationApi } from '../../api/organizationApi'
 
-export const UserPagination = ({
+export const OrganizationPagination = ({
    setData,
    pageCount,
    setCurrentPage,
@@ -16,7 +16,7 @@ export const UserPagination = ({
    useEffect(() => {
       const getUsers = async (currentPage) => {
          try {
-            const res = await userApi.getAllPagination(currentPage)
+            const res = await organizationApi.getAllPagination(currentPage)
             setData(res.data.people)
          } catch (err) {}
       }

@@ -1,36 +1,37 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { organizationApi } from '../api/organizationApi';
-import { Loader } from '../components/Loader';
-import { PageTitle } from '../components/PageTitle';
+import { servicesApi } from '../../api/servicesApi';
+import { Loader } from '../../components/Loader';
+import { PageTitle } from '../../components/PageTitle';
+import { toast } from 'react-toastify'
 
-export const Organization = ({ t }) => {
+export const Services = ({ t }) => {
    const [loading, setLoading] = useState(false);
    const [data, setData] = useState([]);
    const [currentPage, setCurrentPage] = useState(1);
    const [pageCount, setPageCount] = useState(0)
    const [search, setSearch] = useState('');
 
-   const getOrganization = async () => {
+   const getServices = async () => {
       try {
-         const res = await organizationApi.getAll()
-         setData(res.data.organizations);
+         const res = await servicesApi.getAll()
+         setData(res.data.services);
          setPageCount(Math.ceil(res.data.pagination.total / 10));
          setLoading(true);
       } catch (err) {}
    }
 
-   const searchOrganization = async (e) => {
+   const searchServices = async (e) => {
       e.preventDefault();
       try {
-         const res = await organizationApi.getSearch(search)
-         setData(res.data.organizations);
+         const res = await servicesApi.getSearch(search)
+         setData(res.data.services);
       } catch (err) {}
    }
 
    useEffect(() => {
       if (search === '') {
-         getOrganization();
+         getServices();
       }
    }, [search])
    return (
@@ -41,8 +42,8 @@ export const Organization = ({ t }) => {
                   <div className='card'>
                      <div className="card-header pb-2">
                         <div className='d-flex align-items-center justify-content-between'>
-                           <PageTitle title={'organization'} t={t} />
-                           <Link to='/admin/organization/create' className='btn btn-primary'>
+                           <PageTitle title={'services'} t={t} />
+                           <Link to='/admin/services/create' className='btn btn-primary'>
                               {t('create')}
                            </Link>
                         </div>
@@ -52,7 +53,7 @@ export const Organization = ({ t }) => {
                <div className="col-12">
                   <div className="card">
                      <div className="card-header">
-                        <form className='input-group' onSubmit={searchOrganization}>
+                        <form className='input-group' onSubmit={searchServices}>
                            <input 
                               type="text" 
                               className='form-control'
@@ -68,7 +69,12 @@ export const Organization = ({ t }) => {
                      {data.length > 0 ? (
                         <>
                            <div className="card-body">
-                              <OrganizationList data={data} t={t} currentPage={currentPage} />
+                              <OrganizationList 
+                                 data={data} 
+                                 t={t} 
+                                 currentPage={currentPage}
+                                 getServices={getServices} 
+                              />
                            </div>
                         </>
                      ) : (
@@ -89,7 +95,17 @@ export const Organization = ({ t }) => {
    )
 }
 
-const OrganizationList = ({ data, t, currentPage }) => {
+const OrganizationList = ({ data, t, currentPage, getServices }) => {
+   const deleteHandler = async (e, id) => {
+      try {
+         let confirm = window.confirm(t('isDelete'))
+         if(confirm) {
+            await servicesApi.delete(id)
+            getServices()
+            toast.success(t('delete'))
+         }
+      } catch (err) {}
+   } 
    return (
       <div className='table-responsive'>
          <table className='table table-hover card-title text-center'>
@@ -99,7 +115,7 @@ const OrganizationList = ({ data, t, currentPage }) => {
                   <th>{t('image')}</th>
                   <th>{t('uzName')}</th>
                   <th>{t('rusName')}</th>
-                  <th>{t('countService')}</th>
+                  <th>{t('organization')}</th>
                   <th>{t('action')}</th>
                </tr>
             </thead>
@@ -109,21 +125,25 @@ const OrganizationList = ({ data, t, currentPage }) => {
                      <td>
                         {currentPage * 10 - 10 + index + 1}
                      </td>
-                     <td className='d-flex align-items-center justify-content-center'>
+                     <td>
                         <div style={{ width: '50px' }} className="bg-dark rounded-circle">
                            <img src={item.image} alt={item.name} style={{ width: '100%' }} />
                         </div>
                      </td>
                      <td>{item.name}</td>
                      <td>{item.ruName}</td>
-                     <td>{item.services.length}</td>
-                     <td className='d-flex align-items-center justify-content-center'>
-                        <button className='btn btn-primary me-3'>
-                           <i className='fas fa-pen'></i>
-                        </button>
-                        <button className='btn btn-danger'>
-                           <i className='fas fa-trash'></i>
-                        </button>
+                     <td>{item.organization.name}</td>
+                     <td>
+                        <div className='d-flex align-items-center justify-content-center'>
+                           <Link className='btn btn-primary me-3' to={`/admin/organization/update/${item._id}`}>
+                              <i className='fas fa-pen'></i>
+                           </Link>
+                           <button className='btn btn-danger' onClick={e => {
+                              deleteHandler(e, item._id)
+                           }}>
+                              <i className='fas fa-trash'></i>
+                           </button>
+                        </div>
                      </td>
                   </tr>
                ))}

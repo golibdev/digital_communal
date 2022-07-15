@@ -27,5 +27,14 @@
    "organization_created": "Tashkilot yaratildi",
    "organization_not_created": "Tashkilot yaratilmadi",
    "countService": "Xizmatlar soni",
-   "action": "Amallar"
+   "action": "Amallar",
+   "delete": "Muvaffaqqiyatli o'chirildi",
+   "update": "Muvaffaqqiyatli tahrirlandi",
+   "save": "Saqlash",
+   "description": "Xizmat haqida o'zbek tilida",
+   "ruDescription": "Xizmat haqida rus tilida",
+   "price": "Narxi",
+   "services_created": "Xizmat yaratildi",
+   "services_not_created": "Xizmat yaratilmadi",
+   "isDelete": "Rostdan ham o'chirilsinmi?"
 }

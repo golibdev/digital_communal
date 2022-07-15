@@ -2,7 +2,6 @@ const { PhysicalPerson } = require('../models')
 const jwt = require('jsonwebtoken')
 const CryptoJS = require("crypto-js");
 const path = require('path')
-const fs = require('fs')
 
 exports.login = async (req, res) => {
    try {

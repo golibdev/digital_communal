@@ -93,25 +93,6 @@ exports.getOne = async (req, res) => {
    }
 }
 
-exports.getOneBySlug = async (req, res) => {
-   try {
-      const slug = req.params.slug
-
-      const service = await Service.findOne({ ruSlug: slug }) || await Service.findOne({ uzSlug: slug })
-
-      if(!service) {
-         return res.status(404).json({
-            ruMessage: 'Услуга не найдена',
-            uzMessage: 'Xizmat topilmadi'
-         })
-      }
-
-      res.status(200).json({ service })
-   } catch (err) {
-      res.status(500).json({ message: err.message })
-   }
-}
-
 exports.create = async (req, res) => {
    try {
       if(!req.files) {
@@ -166,19 +147,6 @@ exports.create = async (req, res) => {
             uzMessage: 'Organizatsiya topilmadi'
          })
       }
-
-      const ruSlug = slugify(title, {
-         replacement: '-',
-         remove: /[$*_+~.()'"!\-:@]/g,
-         lower: true
-      })
-
-      const uzSlug = slugify(title, {
-         replacement: '-',
-         remove: /[$*_+~.()'"!\-:@]/g,
-         lower: true
-      })
-
       image.name = `image_${Date.now()}${path.parse(image.name).ext}`
 
       image.mv(`public/uploads/service/${image.name}`, async (err) => {
@@ -196,9 +164,7 @@ exports.create = async (req, res) => {
          description,
          ruDescription,
          image: `${req.protocol}://${host}/uploads/service/${image.name}`,
-         organization,
-         ruSlug,
-         uzSlug
+         organization
       })
 
       await Organization.findByIdAndUpdate(organization, {

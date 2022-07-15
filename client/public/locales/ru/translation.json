@@ -27,5 +27,14 @@
    "organization_created": "Организация создана",
    "organization_not_created": "Организация не создана",
    "countService": "Количество сервисов",
-   "action": "Действие"
+   "action": "Действие",
+   "delete": "Удалено успешно",
+   "update": "Отредактировано успешно",
+   "save": "Сохранять",
+   "description": "О службе на узбекском",
+   "ruDescription": "О сервисе на русском",
+   "price": "Цена",
+   "services_created": "Сервис был создан",
+   "services_not_created": "Сервис не создан",
+   "isDelete": "Реально удалить?"
 }
